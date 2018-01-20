@@ -9,10 +9,10 @@
     <ion-card-content>
       <ion-list no-lines>
         <ion-item>
-          <ion-input type="email" placeholder="email" [(ngModel)]="email"></ion-input>
+          <ion-input type="email" placeholder="email" [(ngModel)]="user.email"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input type="password" placeholder="Password" [(ngModel)]="password"></ion-input>
+          <ion-input type="password" placeholder="Password" [(ngModel)]="user.password"></ion-input>
         </ion-item>
         <a (click)="passwordReset()">Forget your login details?
           <b>Get help</b>

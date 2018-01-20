@@ -1,13 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { User } from '../../app/models/user.model';
-
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { AuthProvider } from '../../providers/auth/auth';
 
 @IonicPage()
 @Component({
@@ -17,7 +11,8 @@ import { User } from '../../app/models/user.model';
 export class LoginPage {
 
   user = {} as User;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private authProvider: AuthProvider) {
+
 
   }
 
@@ -30,7 +25,14 @@ export class LoginPage {
   }
 
   login() {
-
+    this.authProvider.login(this.user)
+      .then((res: any) => {
+        if (!res.code) {
+          this.navCtrl.setRoot('TabsPage');
+        } else {
+          alert(res);
+        }
+      })
   }
   signup() {
 
