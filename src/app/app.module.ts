@@ -10,6 +10,7 @@ import { config } from './app.firebase.config';
 
 import { MyApp } from './app.component';
 import { AuthProvider } from '../providers/auth/auth';
+import { UserProvider } from '../providers/user/user';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AuthProvider } from '../providers/auth/auth';
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    AuthProvider
+    AuthProvider,
+    UserProvider
   ]
 })
 export class AppModule { }

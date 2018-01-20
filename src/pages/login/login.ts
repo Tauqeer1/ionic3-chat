@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { User } from '../../app/models/user.model';
+import { User } from '../../models/user.model';
 import { AuthProvider } from '../../providers/auth/auth';
 
 @IonicPage()
@@ -17,7 +17,11 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
+
+  }
+
+  signup() {
+    this.navCtrl.push('SignupPage');
   }
 
   passwordReset() {
@@ -33,9 +37,6 @@ export class LoginPage {
           alert(res);
         }
       })
-  }
-  signup() {
-
   }
 
 }
