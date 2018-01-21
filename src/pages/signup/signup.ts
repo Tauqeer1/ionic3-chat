@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the SignupPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { UserProvider } from './../../providers/user/user';
 
 @IonicPage()
 @Component({
@@ -15,11 +9,58 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SignupPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  // Only use once for signup, so don't need to create interface
+  newUser = {
+    email: '',
+    password: '',
+    displayName: ''
+  }
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    private userProvider: UserProvider, private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SignupPage');
+
   }
+
+  signup() {
+    console.log('this.newUSer', this.newUser);
+    const toaster = this.toastCtrl.create({
+      duration: 3000,
+      position: 'bottom'
+    });
+    if (this.newUser.email === '' || this.newUser.password === '' || this.newUser.displayName === '') {
+      toaster.setMessage('All fields are required');
+      toaster.present();
+    } else {
+      const loader = this.loadingCtrl.create({
+        content: 'Please wait'
+      });
+      loader.present();
+      this.userProvider.createUser(this.newUser)
+        .then((res: any) => {
+          console.log('res', res);
+          loader.dismiss();
+          if (res.success) {
+            this.navCtrl.push('ProfilepicPage')
+          } else {
+            console.error('err', res);
+
+          }
+        }).catch(err => {
+          console.error('err1', err);
+          loader.dismiss();
+          toaster.setMessage(err.message);
+          toaster.present();
+        })
+    }
+  }
+
+  goBack() {
+    this.navCtrl.pop();
+  }
+
+
 
 }

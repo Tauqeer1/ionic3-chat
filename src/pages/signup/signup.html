@@ -19,7 +19,19 @@
       Signup
     </ion-card-header>
     <ion-card-content>
-
+      <ion-list>
+        <ion-item>
+          <ion-input type="email" placeholder="Email" [(ngModel)]="newUser.email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="password" placeholder="Password" [(ngModel)]="newUser.password"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="text" placeholder="Name" [(ngModel)]="newUser.displayName"></ion-input>
+        </ion-item>
+        <button ion-button outline (click)="signup()">Sign Up</button>
+        <button ion-button clear (click)="goBack()">Back</button>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 </ion-content>
