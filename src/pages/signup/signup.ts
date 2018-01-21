@@ -46,7 +46,6 @@ export class SignupPage {
             this.navCtrl.push('ProfilepicPage')
           } else {
             console.error('err', res);
-
           }
         }).catch(err => {
           console.error('err1', err);

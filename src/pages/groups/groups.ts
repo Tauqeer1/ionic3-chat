@@ -13,7 +13,7 @@ export class GroupsPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad GroupsPage');
+
   }
 
 }
