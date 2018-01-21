@@ -40,7 +40,6 @@ export class SignupPage {
       loader.present();
       this.userProvider.createUser(this.newUser)
         .then((res: any) => {
-          console.log('res', res);
           loader.dismiss();
           if (res.success) {
             this.navCtrl.push('ProfilepicPage')

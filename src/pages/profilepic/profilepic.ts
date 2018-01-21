@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ImagehandlerProvider } from '../../providers/imagehandler/imagehandler';
 
 
 @IonicPage()
@@ -8,12 +9,22 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'profilepic.html',
 })
 export class ProfilepicPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  photoUrl: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, private imageHandlerProvider: ImagehandlerProvider) {
   }
 
   ionViewDidLoad() {
 
   }
+
+  chooseImage() {
+    this.imageHandlerProvider.uploadImage()
+      .then(imageUrl => {
+        this.photoUrl = imageUrl;
+      }).catch(err => {
+
+      })
+  }
+
 
 }

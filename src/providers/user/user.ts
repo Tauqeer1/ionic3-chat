@@ -37,4 +37,15 @@ export class UserProvider {
         });
     });
   }
+
+  resetPassword(email) {
+    return new Promise((resolve, reject) => {
+      firebase.auth().sendPasswordResetEmail(email)
+        .then(() => {
+          resolve({ success: true });
+        }).catch(err => {
+          reject(err);
+        })
+    })
+  }
 }
