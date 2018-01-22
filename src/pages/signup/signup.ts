@@ -25,7 +25,6 @@ export class SignupPage {
   }
 
   signup() {
-    console.log('this.newUSer', this.newUser);
     const toaster = this.toastCtrl.create({
       duration: 3000,
       position: 'bottom'

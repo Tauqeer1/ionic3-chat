@@ -1,24 +1,26 @@
 <ion-header>
 
-
+  <ion-navbar color="header-color">
+    <ion-title>Profile Picture</ion-title>
+  </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
   <div class="profile-image">
-    {{imgUrl}}
+    <img [src]="imgUrl" />
   </div>
 
   <div>
     <button ion-button round outline (click)="chooseImage()">Choose an image</button>
   </div>
 
-  <div [hidden]="moveon">
-    <button ion-button round outline (click)="updateImage()">Choose an image</button>
+  <div [hidden]="!moveon">
+    <button ion-button round outline (click)="proceed()">Skip this step</button>
   </div>
 
-  <div [hidden]="!moveon">
-    <button ion-button round outline (click)="chooseImage()">Choose an image</button>
+  <div [hidden]="moveon">
+    <button ion-button round outline (click)="proceed()">Upload & Proceed</button>
   </div>
 </ion-content>
