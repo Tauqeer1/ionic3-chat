@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { UserProvider } from '../../providers/user/user';
 
 @IonicPage()
 @Component({
@@ -9,10 +9,33 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ProfilePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  avatar: string;
+  displayName: string;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private userProvider: UserProvider, private zone: NgZone) {
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
+    this.loadUserDetails();
   }
 
+  loadUserDetails() {
+    this.userProvider.getUserDetails()
+      .then((res: any) => {
+        this.zone.run(() => {
+          this.avatar = res.photoURL;
+          this.displayName = res.displayName;
+        });
+      });
+  }
+
+  editImage() {
+
+  }
+  editName() {
+
+  }
+  logout() {
+
+  }
 }

@@ -7,6 +7,19 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
+  <div class="profile-image" (click)="editImage()">
+    <img [src]="avatar">
+  </div>
+  <div>
+    <h2 (click)="editName()">{{displayName}}</h2>
+  </div>
+  <div>
+    Tap on your pic or nickname to change it.
+  </div>
+  <div class="spacer" style="height: 10px"></div>
+  <div>
+    <button ion-button outline round color="danger" (click)="logout()">Logout</button>
+  </div>
 </ion-content>

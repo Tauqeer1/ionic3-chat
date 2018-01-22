@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { User } from '../../models/user.model';
 import { AuthProvider } from '../../providers/auth/auth';
 
@@ -11,7 +11,8 @@ import { AuthProvider } from '../../providers/auth/auth';
 export class LoginPage {
 
   user = {} as User;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private authProvider: AuthProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    private authProvider: AuthProvider, private loadingCtrl: LoadingController, private toastCtrl: ToastController) {
 
 
   }
@@ -29,13 +30,27 @@ export class LoginPage {
   }
 
   login() {
+    const toaster = this.toastCtrl.create({
+      duration: 3000,
+      position: 'bottom'
+    });
+    const loader = this.loadingCtrl.create({
+      content: 'Please Wait!'
+    });
+    loader.present();
     this.authProvider.login(this.user)
       .then((res: any) => {
+        loader.dismiss();
         if (!res.code) {
           this.navCtrl.setRoot('TabsPage');
         } else {
-          alert(res);
+          toaster.setMessage(res.code);
+          toaster.present();
         }
+      }).catch(err => {
+        loader.dismiss();
+        toaster.setMessage(err.message);
+        toaster.present();
       })
   }
 

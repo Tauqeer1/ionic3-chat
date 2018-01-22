@@ -5,7 +5,7 @@ import firebase from 'firebase';
 @Injectable()
 export class UserProvider {
 
-  chatUsers = firebase.database().ref('/chatusers');
+  users = firebase.database().ref('/users');
   constructor(private afAuth: AngularFireAuth) {
 
   }
@@ -18,7 +18,7 @@ export class UserProvider {
             displayName: newUser.displayName,
             photoURL: 'https://firebasestorage.googleapis.com/v0/b/fir-chat-6c7cd.appspot.com/o/avatar.jpg?alt=media&token=3d1af62f-dc83-4c77-b269-2fddbe409310'
           }).then(() => {
-            this.chatUsers.child(this.afAuth.auth.currentUser.uid)
+            this.users.child(this.afAuth.auth.currentUser.uid)
               .set({
                 uid: this.afAuth.auth.currentUser.uid,
                 displayName: this.afAuth.auth.currentUser.displayName, // newUser.displayName
@@ -67,7 +67,17 @@ export class UserProvider {
           });
       }).catch(err => {
         reject(err);
-      })
+      });
+    });
+  }
+  getUserDetails() {
+    return new Promise((resolve, reject) => {
+      this.users.child(firebase.auth().currentUser.uid)
+        .once('value', (snapshot) => {
+          resolve(snapshot.val());
+        }).catch(err => {
+          reject(err);
+        });
     });
   }
 }
