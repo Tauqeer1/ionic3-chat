@@ -18,4 +18,15 @@ export class AuthProvider {
         });
     });
   }
+
+  logout() {
+    return new Promise((resolve, reject) => {
+      this.afAuth.auth.signOut()
+        .then(() => {
+          resolve({ success: true });
+        }).catch(err => {
+          reject(err);
+        });
+    });
+  }
 }

@@ -80,4 +80,25 @@ export class UserProvider {
         });
     });
   }
+
+  updateDisplayName(name) {
+    return new Promise((resolve, reject) => {
+      this.afAuth.auth.currentUser.updateProfile({
+        displayName: name,
+        photoURL: this.afAuth.auth.currentUser.photoURL
+      }).then(() => {
+        this.users.child(firebase.auth().currentUser.uid).update({
+          displayName: name,
+          photoURL: this.afAuth.auth.currentUser.photoURL,
+          uid: this.afAuth.auth.currentUser.uid
+        }).then(() => {
+          resolve({ success: true });
+        }).catch(err => {
+          reject(err);
+        })
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
 }
