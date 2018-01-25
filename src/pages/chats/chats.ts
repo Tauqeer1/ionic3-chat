@@ -15,4 +15,7 @@ export class ChatsPage {
 
   }
 
+  addBuddy() {
+    this.navCtrl.push('UsersPage');
+  }
 }

@@ -101,4 +101,19 @@ export class UserProvider {
       });
     });
   }
+
+  getAllUsers() {
+    return new Promise((resolve, reject) => {
+      this.users.orderByChild('uid').once('value', (snapshot) => {
+        let userData = snapshot.val();
+        let tempArr = [];
+        for (let key in userData) {
+          tempArr.push(userData[key]);
+        }
+        resolve(tempArr);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
 }
