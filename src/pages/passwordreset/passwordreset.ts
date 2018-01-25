@@ -42,8 +42,6 @@ export class PasswordresetPage {
           if (res.success) {
             alert.setTitle('Email Sent');
             alert.setSubTitle('Please follow the instruction in the email to reset your password');
-          } else {
-            alert.setTitle('Failed');
           }
           alert.present();
         }).catch(err => {

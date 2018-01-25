@@ -1,7 +1,8 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, ToastController, LoadingController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { AuthProvider } from '../../providers/auth/auth';
+import { ImagehandlerProvider } from '../../providers/imagehandler/imagehandler';
 @IonicPage()
 @Component({
   selector: 'page-profile',
@@ -15,7 +16,8 @@ export class ProfilePage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private userProvider: UserProvider, private zone: NgZone,
     private alertCtrl: AlertController, private authProvider: AuthProvider,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController, private loadingCtrl: LoadingController,
+    private imageHandlerProvider: ImagehandlerProvider) {
   }
 
   ionViewWillEnter() {
@@ -33,9 +35,41 @@ export class ProfilePage {
   }
 
   editImage() {
-
+    const loader = this.loadingCtrl.create({
+      content: 'Please Wait!'
+    });
+    const statusAlert = this.alertCtrl.create({
+      buttons: ['Ok']
+    });
+    loader.present();
+    this.imageHandlerProvider.uploadImage()
+      .then((uploadedUrl: any) => {
+        this.userProvider.updateImage(uploadedUrl)
+          .then((res: any) => {
+            loader.dismiss();
+            if (res.success) {
+              statusAlert.setTitle('Updated');
+              statusAlert.setSubTitle('Your Profile picture has successfully updated');
+              statusAlert.present();
+              this.zone.run(() => {
+                this.avatar = uploadedUrl;
+              });
+            } else {
+              statusAlert.setTitle('Failed!');
+              statusAlert.setSubTitle('Your Profile picture has not changed!');
+              statusAlert.present();
+            }
+          });
+      }).catch(err => {
+        statusAlert.setTitle('Failed!');
+        statusAlert.setSubTitle('Your Profile picture has not changed!');
+        statusAlert.present();
+      });
   }
   editName() {
+    const loader = this.loadingCtrl.create({
+      content: 'Please Wait'
+    });
     const statusAlert = this.alertCtrl.create({
       buttons: ['Ok']
     });
@@ -56,8 +90,10 @@ export class ProfilePage {
           text: 'Edit',
           handler: data => {
             if (data.nickname) {
+              loader.present();
               this.userProvider.updateDisplayName(data.nickname)
                 .then((res: any) => {
+                  loader.dismiss();
                   if (res.success) {
                     statusAlert.setTitle('Updated');
                     statusAlert.setSubTitle('Your Nickname has successfully updated');
