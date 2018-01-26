@@ -1,29 +1,30 @@
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>users</ion-title>
+  <ion-navbar color="header-color">
+    <ion-title>Users</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
+  <ion-searchbar (ionInput)="searchUser($event)"></ion-searchbar>
   <ion-list no-lines>
     <ion-list>
-      <ion-item sliding *ngFor="let key of filteredUsers">
+      <ion-item-sliding *ngFor="let key of filteredUsers">
         <ion-item>
           <ion-avatar item-left>
             <img [src]="key.photoURL">
           </ion-avatar>
           <h2>{{key.displayName}}</h2>
         </ion-item>
-        <ion-item-options slide="left">
+        <ion-item-options side="right">
           <button ion-button color="primary" (click)="sendRequest()">
             <ion-icon name="person-add"></ion-icon>
             Add
           </button>
         </ion-item-options>
-      </ion-item>
+      </ion-item-sliding>
     </ion-list>
   </ion-list>
 </ion-content>
