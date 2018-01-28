@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
-
+import { Request } from '../../models/request.model';
+import { RequestsProvider } from '../../providers/requests/requests';
+import firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -11,7 +13,10 @@ import { UserProvider } from '../../providers/user/user';
 export class UsersPage {
   filteredUsers = [];
   tempArr = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams, private userProvider: UserProvider) {
+  newRequest = {} as Request;
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    private userProvider: UserProvider, private alertCtrl: AlertController,
+    private requestsProvider: RequestsProvider) {
     this.userProvider.getAllUsers().then((res: any) => {
       this.filteredUsers = res;
       this.tempArr = res;
@@ -22,8 +27,28 @@ export class UsersPage {
 
   }
 
-  sendRequest() {
-    console.log('working');
+  sendRequest(recipient) {
+    this.newRequest.sender = firebase.auth().currentUser.uid;
+    this.newRequest.recipient = recipient.uid;
+    if (this.newRequest.sender === this.newRequest.recipient) {
+      console.log('You are already friend');
+    } else {
+      let successAlert = this.alertCtrl.create({
+        title: 'Request sent',
+        subTitle: `Your request sent to ${recipient.displayName}`,
+        buttons: ['Ok']
+      });
+      this.requestsProvider.sendRequest(this.newRequest)
+        .then((res: any) => {
+          if (res.success) {
+            successAlert.present();
+            let sentUser = this.filteredUsers.indexOf(recipient);
+            this.filteredUsers.splice(sentUser, 1);
+          }
+        }).catch(err => {
+          console.error('err', err);
+        })
+    }
   }
 
   searchUser(e) {

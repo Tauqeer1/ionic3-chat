@@ -15,6 +15,7 @@ import { MyApp } from './app.component';
 import { AuthProvider } from '../providers/auth/auth';
 import { UserProvider } from '../providers/user/user';
 import { ImagehandlerProvider } from '../providers/imagehandler/imagehandler';
+import { RequestsProvider } from '../providers/requests/requests';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ImagehandlerProvider } from '../providers/imagehandler/imagehandler';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthProvider,
     UserProvider,
-    ImagehandlerProvider
+    ImagehandlerProvider,
+    RequestsProvider
   ]
 })
 export class AppModule { }

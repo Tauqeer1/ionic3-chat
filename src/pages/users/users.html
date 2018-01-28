@@ -11,15 +11,15 @@
   <ion-searchbar (ionInput)="searchUser($event)"></ion-searchbar>
   <ion-list no-lines>
     <ion-list>
-      <ion-item-sliding *ngFor="let key of filteredUsers">
+      <ion-item-sliding *ngFor="let user of filteredUsers">
         <ion-item>
           <ion-avatar item-left>
-            <img [src]="key.photoURL">
+            <img [src]="user.photoURL">
           </ion-avatar>
-          <h2>{{key.displayName}}</h2>
+          <h2>{{user.displayName}}</h2>
         </ion-item>
         <ion-item-options side="right">
-          <button ion-button color="primary" (click)="sendRequest()">
+          <button ion-button color="primary" (click)="sendRequest(user)">
             <ion-icon name="person-add"></ion-icon>
             Add
           </button>
