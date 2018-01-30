@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { RequestsProvider } from '../../providers/requests/requests';
 
 @IonicPage()
 @Component({
@@ -8,14 +9,35 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ChatsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  myRequests;
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    private requestProvider: RequestsProvider, private events: Events) {
   }
 
   ionViewDidLoad() {
 
   }
+  ionViewWillEnter() {
+    this.requestProvider.getMyRequests();
+    this.events.subscribe('gotRequests', () => {
+      this.myRequests = [];
+      this.myRequests = this.requestProvider.userDetails;
+    });
+  }
 
+  ionViewDidLeave() {
+    this.events.unsubscribe('gotRequests');
+  }
   addBuddy() {
     this.navCtrl.push('UsersPage');
   }
+
+  accept(item) {
+
+  }
+
+  ignore(item) {
+
+  }
+
 }
