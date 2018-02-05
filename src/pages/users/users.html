@@ -1,6 +1,11 @@
 <ion-header>
 
-  <ion-navbar color="header-color">
+  <ion-navbar hideBackButton="true" color="header-color">
+    <ion-buttons left>
+      <button (click)="back()" ion-button icon-left clear small>
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>Users</ion-title>
   </ion-navbar>
 

@@ -33,11 +33,11 @@ export class ChatsPage {
   }
 
   accept(item) {
-
+    console.log('item', item);
   }
 
   ignore(item) {
-
+    console.log('item ignore', item);
   }
 
 }

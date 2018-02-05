@@ -27,9 +27,14 @@ export class UsersPage {
 
   }
 
+  back() {
+    this.navCtrl.pop();
+  }
   sendRequest(recipient) {
+    console.log('recipient', recipient);
     this.newRequest.sender = firebase.auth().currentUser.uid;
     this.newRequest.recipient = recipient.uid;
+    console.log('this.newRequest', this.newRequest);
     if (this.newRequest.sender === this.newRequest.recipient) {
       console.log('You are already friend');
     } else {
@@ -43,6 +48,7 @@ export class UsersPage {
           if (res.success) {
             successAlert.present();
             let sentUser = this.filteredUsers.indexOf(recipient);
+            console.log('sentUser', sentUser);
             this.filteredUsers.splice(sentUser, 1);
           }
         }).catch(err => {
@@ -54,7 +60,6 @@ export class UsersPage {
   searchUser(e) {
     this.filteredUsers = this.tempArr;
     let q = e.target.value;
-    console.log('q', q);
     if (!q || q.trim() === '') {
       return;
     }
