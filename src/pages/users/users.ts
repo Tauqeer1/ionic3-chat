@@ -14,9 +14,11 @@ export class UsersPage {
   filteredUsers = [];
   tempArr = [];
   newRequest = {} as Request;
+  currentUserId: string;
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private userProvider: UserProvider, private alertCtrl: AlertController,
     private requestsProvider: RequestsProvider) {
+    this.currentUserId = firebase.auth().currentUser.uid;
     this.userProvider.getAllUsers().then((res: any) => {
       this.filteredUsers = res;
       this.tempArr = res;
@@ -31,10 +33,8 @@ export class UsersPage {
     this.navCtrl.pop();
   }
   sendRequest(recipient) {
-    console.log('recipient', recipient);
     this.newRequest.sender = firebase.auth().currentUser.uid;
     this.newRequest.recipient = recipient.uid;
-    console.log('this.newRequest', this.newRequest);
     if (this.newRequest.sender === this.newRequest.recipient) {
       console.log('You are already friend');
     } else {
@@ -48,7 +48,6 @@ export class UsersPage {
           if (res.success) {
             successAlert.present();
             let sentUser = this.filteredUsers.indexOf(recipient);
-            console.log('sentUser', sentUser);
             this.filteredUsers.splice(sentUser, 1);
           }
         }).catch(err => {

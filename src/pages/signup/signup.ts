@@ -46,7 +46,6 @@ export class SignupPage {
             console.error('err', res);
           }
         }).catch(err => {
-          console.error('err1', err);
           loader.dismiss();
           toaster.setMessage(err.message);
           toaster.present();
