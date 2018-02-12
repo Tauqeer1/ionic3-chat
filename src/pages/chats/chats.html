@@ -20,11 +20,11 @@
         <h4>{{item.displayName}}</h4>
       </ion-item>
       <ion-item-options>
-        <button ion-button color="secondary" (click)="accept(item)">
+        <button ion-button color="secondary" (click)="acceptRequest(item)">
           <ion-icon name="checkmark"></ion-icon>
           Add
         </button>
-        <button ion-button color="danger" (click)="ignore(item)">
+        <button ion-button color="danger" (click)="declineRequest(item)">
           <ion-icon name="trash"></ion-icon>
           Reject
         </button>

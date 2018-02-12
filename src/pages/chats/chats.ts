@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events, AlertController } from 'ionic-angular';
 import { RequestsProvider } from '../../providers/requests/requests';
 
 @IonicPage()
@@ -11,7 +11,7 @@ export class ChatsPage {
 
   myRequests;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private requestProvider: RequestsProvider, private events: Events) {
+    private requestProvider: RequestsProvider, private events: Events, private alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -32,12 +32,23 @@ export class ChatsPage {
     this.navCtrl.push('UsersPage');
   }
 
-  accept(item) {
+  acceptRequest(item) {
     console.log('item', item);
+    this.requestProvider.acceptRequest(item).then(() => {
+      let alert = this.alertCtrl.create({
+        title: 'Friend added',
+        subTitle: 'Tap on the friend to chat with him/her',
+        buttons: ['Okay']
+      });
+      alert.present();
+    })
   }
 
-  ignore(item) {
-    console.log('item ignore', item);
+  declineRequest(item) {
+    console.log('item  ignore', item);
+    this.requestProvider.declineRequest(item).then(() => {
+
+    });
   }
 
 }

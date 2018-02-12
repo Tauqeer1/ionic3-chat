@@ -7,6 +7,7 @@ import firebase from 'firebase';
 export class RequestsProvider {
 
   friends_request = firebase.database().ref('/friends_request');
+  firends = firebase.database().ref('/friends');
   userDetails = [];
   constructor(private userProvider: UserProvider, private events: Events) {
 
@@ -45,8 +46,50 @@ export class RequestsProvider {
           }
         }
         this.events.publish('gotRequests');
-      })
+      });
+  }
 
+  acceptRequest(item) {
+    console.log('item', item);
+    return new Promise((resolve, reject) => {
+      this.firends.child(firebase.auth().currentUser.uid).push({
+        uid: item.uid
+      }).then(() => {
+        console.log('working');
+        this.firends.child(item.uid).push({
+          uid: firebase.auth().currentUser.uid
+        }).then(() => {
+          console.log('working 1');
+          this.declineRequest(item).then(() => {
+            resolve({ success: true })
+          }).catch((err) => {
+            reject(err);
+          })
+        })
+      });
+    });
+  }
+
+  declineRequest(item) {
+    console.log('item', item);
+    return new Promise((resolve, reject) => {
+      this.friends_request.child(firebase.auth().currentUser.uid).orderByChild('sender')
+        .equalTo(item.uid).once('value', (snapshot) => {
+          console.log('snapshot', snapshot);
+          let tempStore = snapshot.val();
+          console.log('tempStore', tempStore);
+          let someKey = Object.keys(tempStore);
+          console.log('someKey', someKey);
+          this.firends.child(firebase.auth().currentUser.uid).child(someKey[0])
+            .remove().then(() => {
+              resolve({ success: true });
+            }).catch((err) => {
+              reject(err);
+            }).catch((err) => {
+              reject(err);
+            });
+        });
+    });
   }
 
 }
