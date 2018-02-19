@@ -10,6 +10,7 @@ import { RequestsProvider } from '../../providers/requests/requests';
 export class ChatsPage {
 
   myRequests;
+  myFriends;
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private requestProvider: RequestsProvider, private events: Events, private alertCtrl: AlertController) {
   }
@@ -19,21 +20,27 @@ export class ChatsPage {
   }
   ionViewWillEnter() {
     this.requestProvider.getMyRequests();
+    this.requestProvider.getMyFriends();
     this.events.subscribe('gotRequests', () => {
       this.myRequests = [];
       this.myRequests = this.requestProvider.userDetails;
     });
+
+    this.events.subscribe('friends', () => {
+      this.myFriends = [];
+      this.myFriends = this.requestProvider.myFriends;
+    })
   }
 
   ionViewDidLeave() {
     this.events.unsubscribe('gotRequests');
+    this.events.unsubscribe('friends');
   }
   addBuddy() {
     this.navCtrl.push('UsersPage');
   }
 
   acceptRequest(item) {
-    console.log('item', item);
     this.requestProvider.acceptRequest(item).then(() => {
       let alert = this.alertCtrl.create({
         title: 'Friend added',
@@ -45,7 +52,6 @@ export class ChatsPage {
   }
 
   declineRequest(item) {
-    console.log('item  ignore', item);
     this.requestProvider.declineRequest(item).then(() => {
 
     });

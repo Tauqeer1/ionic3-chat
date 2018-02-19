@@ -8,7 +8,8 @@ export class RequestsProvider {
 
   friends_request = firebase.database().ref('/friends_request');
   firends = firebase.database().ref('/friends');
-  userDetails = [];
+  userDetails;
+  myFriends;
   constructor(private userProvider: UserProvider, private events: Events) {
 
   }
@@ -50,16 +51,13 @@ export class RequestsProvider {
   }
 
   acceptRequest(item) {
-    console.log('item', item);
     return new Promise((resolve, reject) => {
       this.firends.child(firebase.auth().currentUser.uid).push({
         uid: item.uid
       }).then(() => {
-        console.log('working');
         this.firends.child(item.uid).push({
           uid: firebase.auth().currentUser.uid
         }).then(() => {
-          console.log('working 1');
           this.declineRequest(item).then(() => {
             resolve({ success: true })
           }).catch((err) => {
@@ -71,15 +69,11 @@ export class RequestsProvider {
   }
 
   declineRequest(item) {
-    console.log('item', item);
     return new Promise((resolve, reject) => {
       this.friends_request.child(firebase.auth().currentUser.uid).orderByChild('sender')
         .equalTo(item.uid).once('value', (snapshot) => {
-          console.log('snapshot', snapshot);
           let tempStore = snapshot.val();
-          console.log('tempStore', tempStore);
           let someKey = Object.keys(tempStore);
-          console.log('someKey', someKey);
           this.firends.child(firebase.auth().currentUser.uid).child(someKey[0])
             .remove().then(() => {
               resolve({ success: true });
@@ -92,4 +86,29 @@ export class RequestsProvider {
     });
   }
 
+  getMyFriends() {
+    let friendsUid = [];
+    this.firends.child(firebase.auth().currentUser.uid)
+      .on('value', (snapshot) => {
+        let allFriends = snapshot.val();
+        for (var i in allFriends) {
+          friendsUid.push(allFriends[i].uid);
+        }
+
+        this.userProvider.getAllUsers()
+          .then(users => {
+            this.myFriends = [];
+            for (let j in friendsUid) {
+              for (let key in users) {
+                if (friendsUid[j] === users[key].uid) {
+                  this.myFriends.push(users[key]);
+                }
+              }
+            }
+            this.events.publish('friends');
+          }).catch(err => {
+            console.error('err', err);
+          });
+      });
+  }
 }
