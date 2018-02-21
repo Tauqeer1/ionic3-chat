@@ -16,6 +16,7 @@ import { AuthProvider } from '../providers/auth/auth';
 import { UserProvider } from '../providers/user/user';
 import { ImagehandlerProvider } from '../providers/imagehandler/imagehandler';
 import { RequestsProvider } from '../providers/requests/requests';
+import { ChatProvider } from '../providers/chat/chat';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { RequestsProvider } from '../providers/requests/requests';
     AuthProvider,
     UserProvider,
     ImagehandlerProvider,
-    RequestsProvider
+    RequestsProvider,
+    ChatProvider
   ]
 })
 export class AppModule { }

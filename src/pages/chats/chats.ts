@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events, AlertController } from 'ionic-angular';
 import { RequestsProvider } from '../../providers/requests/requests';
+import { ChatProvider } from '../../providers/chat/chat';
 
 @IonicPage()
 @Component({
@@ -12,7 +13,8 @@ export class ChatsPage {
   myRequests;
   myFriends;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private requestProvider: RequestsProvider, private events: Events, private alertCtrl: AlertController) {
+    private requestProvider: RequestsProvider, private events: Events, private alertCtrl: AlertController,
+    private chatProvider: ChatProvider) {
   }
 
   ionViewDidLoad() {
@@ -53,8 +55,12 @@ export class ChatsPage {
 
   declineRequest(item) {
     this.requestProvider.declineRequest(item).then(() => {
-
     });
+  }
+
+  buddyChat(buddy) {
+    this.chatProvider.initializeChat(buddy);
+    this.navCtrl.push('ChatPage');
   }
 
 }

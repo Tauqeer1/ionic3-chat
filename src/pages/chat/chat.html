@@ -1,0 +1,58 @@
+<ion-header>
+
+  <ion-navbar hideBackButton="true" color="header-color">
+    <ion-buttons left>
+      <button (click)="back()" ion-button icon-left clear small>
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>{{buddy.displayName}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content #content>
+
+  <div class="chatwindow">
+
+    <ion-list no-lines>
+
+      <ion-item *ngFor="let item of allmessages; let i = index" text-wrap>
+
+        <ion-avatar item-left *ngIf="item.sentby === buddy.uid">
+          <img src="{{buddy.photoURL}}">
+        </ion-avatar>
+
+        <div class="bubble me" *ngIf="item.sentby === buddy.uid">
+          <h3 *ngIf="!imgornot[i]">{{item.message}}</h3>
+          <img src="{{item.message}}" *ngIf="imgornot[i]">
+        </div>
+
+        <ion-avatar item-right *ngIf="item.sentby != buddy.uid">
+          <img src="{{photoURL}}">
+        </ion-avatar>
+
+        <div class="bubble you" *ngIf="item.sentby != buddy.uid">
+          <h3 *ngIf="!imgornot[i]">{{item.message}}</h3>
+          <img src="{{item.message}}" *ngIf="imgornot[i]">
+        </div>
+
+      </ion-item>
+
+    </ion-list>
+
+  </div>
+
+</ion-content>
+
+<ion-footer ion-fixed>
+  <ion-toolbar class="no-border" color="white">
+    <ion-input [(ngModel)]="newMessage" placeholder="Write your message ..."></ion-input>
+    <ion-buttons end>
+      <button ion-button (click)="sendMessage()">
+        <ion-icon name="send" color="primary"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
