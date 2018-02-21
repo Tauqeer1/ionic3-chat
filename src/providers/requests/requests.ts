@@ -62,8 +62,8 @@ export class RequestsProvider {
             resolve({ success: true })
           }).catch((err) => {
             reject(err);
-          })
-        })
+          });
+        });
       });
     });
   }
@@ -74,7 +74,7 @@ export class RequestsProvider {
         .equalTo(item.uid).once('value', (snapshot) => {
           let tempStore = snapshot.val();
           let someKey = Object.keys(tempStore);
-          this.firends.child(firebase.auth().currentUser.uid).child(someKey[0])
+          this.friends_request.child(firebase.auth().currentUser.uid).child(someKey[0])
             .remove().then(() => {
               resolve({ success: true });
             }).catch((err) => {
