@@ -23,7 +23,12 @@ export class NewgroupPage {
   }
 
   createGroup() {
-    this.groupProvider.
+    this.groupProvider.createGroup(this.newGroup)
+      .then(res => {
+
+      }).catch(err => {
+        console.error('err', err);
+      })
   }
   editGroupName() {
     const loader = this.loadingCtrl.create({
