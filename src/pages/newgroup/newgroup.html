@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar hideBackButton="true" color="header-color">
+    <ion-buttons left>
+      <button (click)="back()" ion-button icon-left clear small>
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>newgroup</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="profile-image" (click)="chooseGroupImage()">
+    <img [src]="newGroup.groupPic">
+  </div>
+  <div>
+    <h2 (click)="editGroupName()">{{newGroup.groupName}}</h2>
+  </div>
+  <div>
+    Tap on your pic or group name to change it.
+  </div>
+  <div class="spacer" style="height: 10px"></div>
+  <div>
+    <button ion-button outline round color="danger" (click)="createGroup()">Create</button>
+  </div>
+</ion-content>

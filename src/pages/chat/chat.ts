@@ -29,7 +29,7 @@ export class ChatPage {
       this.imageOrNot = [];
       this.allMessages = this.chatProvider.buddyMessages;
       for (let key in this.allMessages) {
-        if (this.allMessages[key].message.subString(0, 4) == 'http') {
+        if (this.allMessages[key].message.substring(0, 4) == 'http') {
           this.imageOrNot.push(true);
         } else {
           this.imageOrNot.push(false);
@@ -85,7 +85,7 @@ export class ChatPage {
   scrollTo() {
     setTimeout(() => {
       this.content.scrollToBottom();
-    }, 1000);
+    }, 10);
   }
 
 

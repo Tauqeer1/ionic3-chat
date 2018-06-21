@@ -16,4 +16,8 @@ export class GroupsPage {
 
   }
 
+  addGroup() {
+    this.navCtrl.push('NewgroupPage');
+  }
+
 }
