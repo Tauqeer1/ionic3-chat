@@ -13,5 +13,15 @@
 
 
 <ion-content padding>
-
+  <ion-list no-lines>
+    <ion-list-header>
+      My Groups
+    </ion-list-header>
+    <ion-item *ngFor="let item of allMyGroups">
+      <ion-avatar item-left>
+        <img [src]="item.groupPic" />
+      </ion-avatar>
+      <h3 (click)="openChat(item.groupName)">{{item.groupName}}</h3>
+    </ion-item>
+  </ion-list>
 </ion-content>

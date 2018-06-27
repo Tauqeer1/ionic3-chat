@@ -24,11 +24,11 @@ export class NewgroupPage {
 
   createGroup() {
     this.groupProvider.createGroup(this.newGroup)
-      .then(res => {
-
+      .then(() => {
+        this.navCtrl.pop();
       }).catch(err => {
         console.error('err', err);
-      })
+      });
   }
   editGroupName() {
     const loader = this.loadingCtrl.create({
@@ -53,6 +53,7 @@ export class NewgroupPage {
             if (data.groupname) {
               loader.present();
               this.newGroup.groupName = data.groupname;
+              loader.dismiss();
             } else {
               this.newGroup.groupName = 'New Group';
             }
