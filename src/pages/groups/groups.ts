@@ -39,7 +39,8 @@ export class GroupsPage {
   }
 
   openChat(group) {
-    console.log('group', group);
+    this.groupsProvider.getIntoGroup(group.groupName);
+    this.navCtrl.push('GroupchatPage', { groupName: group.groupName });
   }
 
 }

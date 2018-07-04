@@ -39,30 +39,30 @@ export class LoginPage {
     const loader = this.loadingCtrl.create({
       content: 'Please Wait!'
     });
-    let user = this.afAuth.auth.currentUser;
-    if (user) {
-      loader.present();
-      this.navCtrl.setRoot('TabsPage');
-      toaster.setMessage('Loggedin successfully');
-      loader.dismiss();
-    } else {
-      loader.present();
-      this.user = { email: 'tauqeer0345@gmail.com', password: '123456' }
-      this.authProvider.login(this.user)
-        .then((res: any) => {
-          loader.dismiss();
-          if (!res.code) {
-            this.navCtrl.setRoot('TabsPage');
-          } else {
-            toaster.setMessage(res.code);
-            toaster.present();
-          }
-        }).catch(err => {
-          loader.dismiss();
-          toaster.setMessage(err.message);
+    // let user = this.afAuth.auth.currentUser;
+    // if (user) {
+    //   loader.present();
+    //   this.navCtrl.setRoot('TabsPage');
+    //   toaster.setMessage('Loggedin successfully');
+    //   loader.dismiss();
+    // } else {
+    loader.present();
+    // this.user = { email: 'tauqeer.shakir@yahoo.com', password: '123456' }
+    this.authProvider.login(this.user)
+      .then((res: any) => {
+        loader.dismiss();
+        if (!res.code) {
+          this.navCtrl.setRoot('TabsPage');
+        } else {
+          toaster.setMessage(res.code);
           toaster.present();
-        });
-    }
+        }
+      }).catch(err => {
+        loader.dismiss();
+        toaster.setMessage(err.message);
+        toaster.present();
+      });
+    // }
   }
 
 }

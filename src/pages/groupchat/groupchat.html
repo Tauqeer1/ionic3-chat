@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-navbar hideBackButton="true" color="header-color">
+    <ion-title>{{groupName}}</ion-title>
+    <ion-buttons left>
+      <button (click)="back()" ion-button icon-left clear small>
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button *ngIf="owner" ion-button icon-only (click)="presentOwnerSheet()">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <button *ngIf="!owner" ion-button icon-only (click)="presentMembersSheet()">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+</ion-content>
