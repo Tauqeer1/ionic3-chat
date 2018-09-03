@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-/**
- * Generated class for the GroupmembersPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -19,7 +13,11 @@ export class GroupmembersPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad GroupmembersPage');
+
+  }
+
+  back() {
+    this.navCtrl.pop();
   }
 
 }

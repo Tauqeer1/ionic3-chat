@@ -12,7 +12,6 @@ export class GroupsProvider {
   }
 
   createGroup(newGroup) {
-    console.log('newGroup', newGroup);
     return new Promise((resolve, reject) => {
       this.groups.child(firebase.auth().currentUser.uid).child(newGroup.groupName).set({
         groupPic: newGroup.groupPic,
@@ -43,7 +42,6 @@ export class GroupsProvider {
   }
 
   getIntoGroup(groupName) {
-    console.log('groupName', groupName);
     if (groupName !== null) {
       this.groups.child(firebase.auth().currentUser.uid).child(groupName).once('value', (snapshot) => {
         if (snapshot.val() !== null) {

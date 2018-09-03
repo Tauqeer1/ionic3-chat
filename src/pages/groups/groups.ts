@@ -27,7 +27,6 @@ export class GroupsPage {
     this.events.subscribe('newgroup', () => {
       loader.dismiss();
       this.allMyGroups = this.groupsProvider.myGroups;
-      console.log('allMyGroups', this.allMyGroups);
     })
   }
   ionViewDidLeave() {
