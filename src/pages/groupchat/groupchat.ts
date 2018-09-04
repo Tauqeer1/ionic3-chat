@@ -18,6 +18,8 @@ export class GroupchatPage {
       .then((res) => {
         if (res) {
           this.owner = true;
+        } else {
+          this.owner = false;
         }
       }).catch(err => {
         console.error('err', err);

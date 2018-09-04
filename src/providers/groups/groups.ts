@@ -66,7 +66,7 @@ export class GroupsProvider {
         if (temp === firebase.auth().currentUser.uid) {
           resolve(true);
         } else {
-          reject(false);
+          resolve(false);
         }
       }).catch(err => {
         reject(err);
@@ -119,7 +119,6 @@ export class GroupsProvider {
   }
 
   deleteMember(member) {
-    console.log('member', member);
     this.groups.child(firebase.auth().currentUser.uid).child(this.currentGroupName)
       .child('members').orderByChild('uid').equalTo(member.uid)
       .once('value', (snapshot) => {
