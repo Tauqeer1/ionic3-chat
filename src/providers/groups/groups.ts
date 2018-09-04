@@ -103,6 +103,20 @@ export class GroupsProvider {
       });
   }
 
+  deleteMember(member) {
+    console.log('member', member);
+    this.groups.child(firebase.auth().currentUser.uid).child(this.currentGroupName)
+      .child('members').orderByChild('uid').equalTo(member.uid)
+      .once('value', (snapshot) => {
+        snapshot.ref.remove().then(() => {
+          this.groups.child(member.uid).child(this.currentGroupName).remove()
+            .then(() => {
+              this.getIntoGroup(this.currentGroupName);
+            });
+        });
+      });
+  }
+
   deleteGroup() {
 
   }
