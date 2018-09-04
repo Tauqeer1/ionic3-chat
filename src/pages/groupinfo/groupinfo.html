@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar hideBackButton="true" color="header-color">
-    <ion-title>groupinfo</ion-title>
+    <ion-title>Group info</ion-title>
     <ion-buttons left>
       <button (click)="back()" ion-button icon-left clear small>
         <ion-icon name="arrow-back"></ion-icon>
@@ -11,6 +11,18 @@
 
 </ion-header>
 
-<ion-content padding>
+<ion-content>
+  <ion-list no-lines>
+    <ion-list-header>
+      Group Members
+    </ion-list-header>
+    <ion-item *ngFor="let item of groupMembers">
+      <ion-avatar item-left>
+        <img [src]="item.photoURL" />
+      </ion-avatar>
+      <h2>{{item.displayName}}</h2>
+      <p>Member</p>
+    </ion-item>
+  </ion-list>
 
 </ion-content>

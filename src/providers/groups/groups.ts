@@ -84,6 +84,21 @@ export class GroupsProvider {
     });
   }
 
+  getGroupMembers() {
+    this.groups.child(firebase.auth().currentUser.uid).child(this.currentGroupName)
+      .once('value', (snapshot) => {
+        let tempData = snapshot.val().owner;
+        this.groups.child(tempData).child(this.currentGroupName).child('members')
+          .once('value', (snapshot) => {
+            let temp = snapshot.val();
+            for (let key in temp) {
+              this.currentGroup.push(temp[key]);
+            }
+          });
+      });
+    this.events.publish('gotMembers');
+  }
+
   addMember(newMember) {
     this.groups.child(firebase.auth().currentUser.uid)
       .child(this.currentGroupName)
