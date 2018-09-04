@@ -11,6 +11,7 @@ export class GroupbuddiesPage {
   myFriends = [];
   groupMembers = [];
   tempMyFriends = [];
+  newBuddy;
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private requestProvider: RequestsProvider, private events: Events,
     private groupsProvider: GroupsProvider) {
@@ -18,6 +19,10 @@ export class GroupbuddiesPage {
 
   ionViewWillEnter() {
     this.requestProvider.getMyFriends();
+    this.events.subscribe('gotIntoGroup', () => {
+      this.myFriends.splice(this.myFriends.indexOf(this.newBuddy.uid), 1);
+      this.tempMyFriends = this.myFriends;
+    });
     this.events.subscribe('friends', () => {
       this.myFriends = [];
       this.myFriends = this.requestProvider.myFriends;
@@ -40,12 +45,10 @@ export class GroupbuddiesPage {
   searchBuddy(e) {
     this.myFriends = this.tempMyFriends;
     let q = e.target.value;
-    console.log('q', q);
     if (!q || q.trim() === '') {
       return;
     }
     this.myFriends = this.myFriends.filter((v) => {
-      // console.log('v', v);
       if (v.displayName.toLowerCase().indexOf(q.toLowerCase()) > -1) {
         return true;
       }
@@ -57,8 +60,9 @@ export class GroupbuddiesPage {
     this.navCtrl.pop();
   }
 
-  addBuddy(key) {
-
+  addBuddy(buddy) {
+    this.newBuddy = buddy;
+    this.groupsProvider.addMember(buddy);
   }
 
 

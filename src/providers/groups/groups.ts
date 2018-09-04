@@ -8,6 +8,8 @@ export class GroupsProvider {
   groups = firebase.database().ref('groups');
   myGroups = [];
   currentGroup: Array<any> = [];
+  currentGroupName;
+  groupPic;
   constructor(private events: Events) {
   }
 
@@ -50,6 +52,7 @@ export class GroupsProvider {
           for (let key in temp) {
             this.currentGroup.push(temp[key]);
           }
+          this.currentGroupName = groupName;
           this.events.publish('gotIntoGroup');
         }
       });
@@ -69,6 +72,35 @@ export class GroupsProvider {
         reject(err);
       });
     });
+  }
+
+  getGroupImage() {
+    return new Promise((resolve, reject) => {
+      this.groups.child(firebase.auth().currentUser.uid).child(this.currentGroupName)
+        .once('value', (snapshot) => {
+          this.groupPic = snapshot.val().groupPic;
+          resolve(true);
+        });
+    });
+  }
+
+  addMember(newMember) {
+    this.groups.child(firebase.auth().currentUser.uid)
+      .child(this.currentGroupName)
+      .child('members').push(newMember)
+      .then(() => {
+        this.getGroupImage().then(() => {
+          this.groups.child(newMember.uid).child(this.currentGroupName)
+            .set({
+              groupPic: this.groupPic,
+              owner: firebase.auth().currentUser.uid,
+              msgBoard: ''
+            }).catch((err) => {
+              console.error('err', err);
+            });
+        });
+        this.getIntoGroup(this.currentGroupName);
+      });
   }
 
   deleteGroup() {
