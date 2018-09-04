@@ -132,7 +132,23 @@ export class GroupsProvider {
   }
 
   deleteGroup() {
+    return new Promise((resolve, reject) => {
+      this.groups.child(firebase.auth().currentUser.uid).child(this.currentGroupName)
+        .child('members').once('value', (snapshot) => {
+          let tempMembers = snapshot.val();
+          let tempUids = [];
+          for (let key in tempMembers) {
+            this.groups.child(tempMembers[key].uid).child(this.currentGroupName).remove();
+          }
 
+          this.groups.child(firebase.auth().currentUser.uid).child(this.currentGroupName)
+            .remove().then(() => {
+              resolve(true);
+            }).catch(err => {
+              reject(err);
+            })
+        })
+    });
   }
 
   leaveGroup() {
