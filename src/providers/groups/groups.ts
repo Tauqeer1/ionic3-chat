@@ -136,7 +136,26 @@ export class GroupsProvider {
   }
 
   leaveGroup() {
-
+    return new Promise((resolve, reject) => {
+      this.groups.child(firebase.auth().currentUser.uid).child(this.currentGroupName)
+        .once('value', (snapshot) => {
+          let tempOwner = snapshot.val().owner;
+          this.groups.child(tempOwner).child(this.currentGroupName).child('members')
+            .orderByChild('uid').equalTo(firebase.auth().currentUser.uid)
+            .once('value', (snapshot) => {
+              snapshot.ref.remove().then(() => {
+                this.groups.child(firebase.auth().currentUser.uid).child(this.currentGroupName).remove()
+                  .then(() => {
+                    resolve(true);
+                  }).catch(err => {
+                    reject(err);
+                  })
+              }).catch(err => {
+                reject(err);
+              });
+            });
+        });
+    });
   }
 
 }

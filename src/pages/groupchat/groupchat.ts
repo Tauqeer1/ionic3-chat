@@ -62,7 +62,7 @@ export class GroupchatPage {
           text: 'Delete Group',
           icon: 'trash',
           handler: () => {
-            this.groupsProvider.deleteGroup();
+            this.deleteGroup();
           }
         },
         {
@@ -86,7 +86,7 @@ export class GroupchatPage {
           text: 'Leave Group',
           icon: 'log-out',
           handler: () => {
-            this.groupsProvider.leaveGroup();
+            this.leaveGroup();
           }
         },
         {
@@ -107,6 +107,25 @@ export class GroupchatPage {
       ]
     });
     sheet.present();
+  }
+
+
+  deleteGroup() {
+    this.groupsProvider.deleteGroup()
+      .then(() => {
+        this.navCtrl.pop();
+      }).catch(err => {
+        console.error('err', err);
+      });
+  }
+
+  leaveGroup() {
+    this.groupsProvider.leaveGroup()
+      .then(() => {
+        this.navCtrl.pop();
+      }).catch(err => {
+        console.error('err', err);
+      })
   }
 
 }
