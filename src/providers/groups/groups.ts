@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 import firebase from 'firebase';
+import { resolveDefinition } from '@angular/core/src/view/util';
 
 @Injectable()
 export class GroupsProvider {
@@ -10,6 +11,7 @@ export class GroupsProvider {
   currentGroup: Array<any> = [];
   currentGroupName;
   groupPic;
+  groupMessages = [];
   constructor(private events: Events) {
   }
 
@@ -172,6 +174,83 @@ export class GroupsProvider {
             });
         });
     });
+  }
+
+  getAllMessages(groupName) {
+
+  }
+
+  sendMessage(message) {
+    return new Promise((resolve) => {
+      this.groups.child(firebase.auth().currentUser.uid).child(this.currentGroupName).child('owner')
+        .once('value', (snapshot) => {
+          let tempOwner = snapshot.val();
+          this.groups.child(firebase.auth().currentUser.uid).child(this.currentGroupName)
+            .child('msgBoard').push({
+              sentBy: firebase.auth().currentUser.uid,
+              displayName: firebase.auth().currentUser.displayName,
+              photoURL: firebase.auth().currentUser.photoURL,
+              message: message,
+              timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+              if (tempOwner !== firebase.auth().currentUser.uid) {
+                this.groups.child(tempOwner).child(this.currentGroupName).child('msgBoard')
+                  .push({
+                    sentBy: firebase.auth().currentUser.uid,
+                    displayName: firebase.auth().currentUser.displayName,
+                    photoURL: firebase.auth().currentUser.photoURL,
+                    message: message,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                  })
+              }
+              let tempMembers = [];
+              this.groups.child(tempOwner).child(this.currentGroupName).child('members')
+                .once('value', (snapshot) => {
+                  let tempMembersObj = snapshot.val();
+                  for (let key in tempMembersObj) {
+                    tempMembers.push(tempMembersObj[key]);
+                  }
+                }).then(() => {
+                  let postedMessage = tempMembers.map((item) => {
+                    if (item.uid !== firebase.auth().currentUser.uid) {
+                      return new Promise((resolve) => {
+                        this.postMessage(item, message, resolve);
+                      })
+                    }
+                  })
+                  Promise.all(postedMessage).then(() => {
+                    this.getGroupMessages(this.currentGroupName);
+                    resolve(true);
+                  })
+                })
+            })
+        })
+    })
+  }
+
+  postMessage(member, message, cb) {
+    this.groups.child(member.uid).child(this.currentGroupName).child('msgBoard')
+      .push({
+        sentBy: firebase.auth().currentUser.uid,
+        displayName: firebase.auth().currentUser.displayName,
+        photoURL: firebase.auth().currentUser.photoURL,
+        message: message,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      }).then(() => {
+        cb();
+      })
+  }
+
+  getGroupMessages(groupName) {
+    this.groups.child(firebase.auth().currentUser.uid).child(groupName).child('msgBoard')
+      .on('value', (snapshot) => {
+        let tempMessage = snapshot.val();
+        this.groupMessages = [];
+        for (let key in tempMessage) {
+          this.groupMessages.push(tempMessage[key]);
+        }
+        this.events.publish('newGroupMessage');
+      })
   }
 
 }

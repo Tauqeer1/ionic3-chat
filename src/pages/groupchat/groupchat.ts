@@ -1,18 +1,25 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, ActionSheetController, Content, Events } from 'ionic-angular';
 import { GroupsProvider } from '../../providers/groups/groups';
-
+import firebase from 'firebase';
 @IonicPage()
 @Component({
   selector: 'page-groupchat',
   templateUrl: 'groupchat.html',
 })
 export class GroupchatPage {
-
+  @ViewChild('content') content: Content;
   owner: boolean = false;
   groupName;
+  newMessage;
+  allGroupMessage = [];
+  alignUid;
+  photoURL;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    private groupsProvider: GroupsProvider, private actionSheet: ActionSheetController) {
+    private groupsProvider: GroupsProvider, private actionSheet: ActionSheetController,
+    private events: Events) {
+    this.alignUid = firebase.auth().currentUser.uid;
+    this.photoURL = firebase.auth().currentUser.photoURL;
     this.groupName = this.navParams.get('groupName');
     this.groupsProvider.getOwnership(this.groupName)
       .then((res) => {
@@ -23,7 +30,13 @@ export class GroupchatPage {
         }
       }).catch(err => {
         console.error('err', err);
-      })
+      });
+    this.groupsProvider.getAllMessages(this.groupName);
+    this.events.subscribe('newGroupMessage', () => {
+      this.allGroupMessage = [];
+      this.allGroupMessage = this.groupsProvider.groupMessages;
+      this.scrollTo();
+    })
   }
 
   ionViewDidLoad() {
@@ -109,6 +122,14 @@ export class GroupchatPage {
     sheet.present();
   }
 
+  sendMessage() {
+    this.groupsProvider.sendMessage(this.newMessage)
+      .then(() => {
+        this.scrollTo();
+        this.newMessage = '';
+      })
+  }
+
 
   deleteGroup() {
     this.groupsProvider.deleteGroup()
@@ -126,6 +147,12 @@ export class GroupchatPage {
       }).catch(err => {
         console.error('err', err);
       })
+  }
+
+  scrollTo() {
+    setTimeout(() => {
+      this.content.scrollToBottom();
+    }, 100);
   }
 
 }
